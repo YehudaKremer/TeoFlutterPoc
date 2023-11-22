@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:csharp_rpc/csharp_rpc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,17 +7,19 @@ import 'package:flutter/material.dart';
 late CsharpRpc csharpRpc;
 
 Future<void> main() async {
-  runApp(const MyApp());
+  var pathToCsharpExecutableFile =
+      '${File(Platform.resolvedExecutable).parent.path}\\ExeFolder\\TeoFlutterPoc.exe';
 
-  var pathToCsharpExecutableFile = kReleaseMode
-      ? 'csharp/TeoFlutterPoc.exe'
-      : "../bin/Debug/net7.0/TeoFlutterPoc.exe";
+  runApp(MyApp(executablePath: pathToCsharpExecutableFile));
 
   csharpRpc = await CsharpRpc(pathToCsharpExecutableFile).start();
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String _executablePath;
+
+  const MyApp({super.key, required String executablePath})
+      : _executablePath = executablePath;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'EURUSD'),
+      home: MyHomePage(title: _executablePath),
     );
   }
 }
